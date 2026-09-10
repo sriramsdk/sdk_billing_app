@@ -1,0 +1,8 @@
+@if($errors->any())<div class="mb-6 rounded-xl bg-red-50 p-4 text-sm text-red-700"><ul class="list-disc space-y-1 pl-5">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+<div class="space-y-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+    <div class="space-y-5">
+        <div><label class="mb-2 block text-sm font-semibold">Product</label><select name="product_id" required class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3"><option value="">Select a product</option>@foreach($products as $product)<option value="{{ $product->id }}" {{ (string) old('product_id', $stock->product_id ?? '') === (string) $product->id ? 'selected' : '' }}>{{ $product->name }} ({{ $product->sku }})</option>@endforeach</select></div>
+        <div class="grid gap-5 md:grid-cols-2"><div><label class="mb-2 block text-sm font-semibold">Available quantity</label><input type="number" name="quantity" value="{{ old('quantity', $stock->quantity ?? 0) }}" min="0" required class="w-full rounded-xl border border-slate-300 px-4 py-3"></div><div><label class="mb-2 block text-sm font-semibold">Reserved quantity</label><input type="number" name="reserved_quantity" value="{{ old('reserved_quantity', $stock->reserved_quantity ?? 0) }}" min="0" required class="w-full rounded-xl border border-slate-300 px-4 py-3"></div></div>
+    </div>
+    <div class="flex justify-end gap-3 border-t pt-5"><a href="{{ route('admin.stocks.index') }}" class="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50">Cancel</a><button class="rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700">Save Stock</button></div>
+</div>

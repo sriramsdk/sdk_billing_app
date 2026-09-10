@@ -1,0 +1,1 @@
+{{-- Admin order details use the shared employee order view with the admin layout. --}}
