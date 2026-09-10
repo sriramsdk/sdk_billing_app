@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\MailLogController;
 use App\Http\Controllers\Employee\BillingController;
 use App\Http\Controllers\Employee\DashboardController as EmployeeDashboardController;
 use App\Http\Controllers\Employee\OrderController;
+use App\Services\SystemHealthService;
 
 Route::get('/', function () {
     return redirect()->route('employee.login');
@@ -91,6 +92,9 @@ Route::middleware(['auth', 'role:admin'])
 
         Route::get('/mail-logs', [MailLogController::class, 'index'])
             ->name('mail-logs');
+
+        Route::get('/health', fn (SystemHealthService $health) => response()->json($health->check()))
+            ->name('health');
     });
 
 
@@ -125,4 +129,7 @@ Route::middleware(['auth', 'role:employee'])
             ->name('orders.print');
         Route::post('/orders/{order}/email', [OrderController::class, 'email'])
             ->name('orders.email');
+
+        Route::get('/health', fn (SystemHealthService $health) => response()->json($health->check()))
+            ->name('health');
     });

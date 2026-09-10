@@ -73,11 +73,8 @@ document.addEventListener('submit', (event) => {
 document.addEventListener('DOMContentLoaded', () => {
 	const flash = document.querySelector('[data-swal-flash]');
 
-	if (!flash) {
-		return;
-	}
-
-	Swal.fire({
+	if (flash) {
+		Swal.fire({
 		toast: true,
 		position: 'top-end',
 		icon: flash.dataset.swalType || 'success',
@@ -85,7 +82,39 @@ document.addEventListener('DOMContentLoaded', () => {
 		showConfirmButton: false,
 		timer: 2600,
 		timerProgressBar: true,
-	});
+		});
+	}
+
+	const healthBadge = document.querySelector('[data-system-health]');
+
+	if (!healthBadge) {
+		return;
+	}
+
+	const refreshHealth = async () => {
+		try {
+			const response = await fetch(healthBadge.dataset.healthEndpoint, {
+				headers: { Accept: 'application/json' },
+				credentials: 'same-origin',
+			});
+
+			if (!response.ok) {
+				return;
+			}
+
+			const health = await response.json();
+			healthBadge.classList.remove('bg-emerald-50', 'text-emerald-700', 'bg-amber-50', 'text-amber-700', 'bg-red-50', 'text-red-700');
+			healthBadge.classList.add(...(health.status_class || 'bg-red-50 text-red-700').split(' '));
+			healthBadge.querySelector('[data-health-status]').textContent = health.status;
+			healthBadge.querySelector('[data-health-query]').textContent = health.query_ms ?? '—';
+			healthBadge.querySelector('[data-health-queued]').textContent = health.queued_jobs;
+			healthBadge.title = `${health.queued_jobs} queued jobs, ${health.failed_jobs} historical failed jobs, ${health.query_ms ?? '—'} ms query`;
+		} catch {
+			// Keep the last known health state when a refresh request fails.
+		}
+	};
+
+	window.setInterval(refreshHealth, Number(healthBadge.dataset.healthRefresh || 5000));
 });
 
 document.addEventListener('submit', (event) => {

@@ -33,14 +33,15 @@ class SystemHealthService
             }
         }
 
-        $healthy = $databaseHealthy
-            && $queryMilliseconds < 500
-            && $failedJobs === 0;
-        $busy = $databaseHealthy && ! $healthy && $queuedJobs < 100 && $failedJobs === 0;
+        $queryHealthy = $queryMilliseconds !== null && $queryMilliseconds < 5000;
+        $healthy = $databaseHealthy && $queryHealthy && $queuedJobs === 0;
+        $busy = $databaseHealthy && $queryHealthy && $queuedJobs > 0;
 
         return [
             'database_healthy' => $databaseHealthy,
             'query_ms' => $queryMilliseconds,
+            'query_healthy' => $queryHealthy,
+            'query_limit_ms' => 5000,
             'queued_jobs' => $queuedJobs,
             'failed_jobs' => $failedJobs,
             'status' => $healthy ? 'Healthy' : ($busy ? 'Busy' : 'Attention'),

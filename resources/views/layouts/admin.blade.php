@@ -199,8 +199,8 @@
 
             <div class="flex items-center gap-3">
 
-                <div class="hidden rounded-xl px-4 py-2 text-sm sm:block {{ $systemHealth['status_class'] }}" title="{{ $systemHealth['queued_jobs'] }} queued jobs, {{ $systemHealth['query_ms'] ?? '—' }} ms query">
-                    ● {{ $systemHealth['status'] }} · {{ $systemHealth['query_ms'] ?? '—' }} ms
+                <div data-system-health data-health-endpoint="{{ route('admin.health') }}" data-health-refresh="{{ config('app.health_refresh_seconds') * 1000 }}" class="hidden rounded-xl px-4 py-2 text-sm sm:block {{ $systemHealth['status_class'] }}" title="{{ $systemHealth['queued_jobs'] }} queued jobs, {{ $systemHealth['failed_jobs'] }} historical failed jobs, {{ $systemHealth['query_ms'] ?? '—' }} ms query">
+                    ● <span data-health-status>{{ $systemHealth['status'] }}</span> · <span data-health-query>{{ $systemHealth['query_ms'] ?? '—' }}</span> ms query · <span data-health-queued>{{ $systemHealth['queued_jobs'] }}</span> queued
                 </div>
 
                 <div class="h-10 w-10 rounded-xl bg-slate-900

@@ -67,6 +67,8 @@ return [
 
     'timezone' => env('APP_TIMEZONE', 'Asia/Kolkata'),
 
+    'health_refresh_seconds' => (int) env('APP_HEALTH_REFRESH_SECONDS', 5),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

@@ -31,9 +31,9 @@
                     <a href="{{ route('employee.billing') }}" class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold {{ request()->routeIs('employee.billing') ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100' }}">New Bill</a>
                     <a href="{{ route('employee.orders') }}" class="whitespace-nowrap rounded-lg px-3 py-2 text-sm font-semibold {{ request()->routeIs('employee.orders*') ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100' }}">My Orders</a>
                 </nav>
-                {{-- <div class="hidden rounded-xl px-3 py-2 text-xs font-semibold sm:block {{ $systemHealth['status_class'] }}" title="{{ $systemHealth['queued_jobs'] }} queued jobs, {{ $systemHealth['query_ms'] ?? '—' }} ms query">
-                    {{ $systemHealth['status'] }} · {{ $systemHealth['queued_jobs'] }} queued
-                </div> --}}
+                <div data-system-health data-health-endpoint="{{ route('employee.health') }}" data-health-refresh="{{ config('app.health_refresh_seconds') * 1000 }}" class="hidden rounded-xl px-3 py-2 text-xs font-semibold sm:block {{ $systemHealth['status_class'] }}" title="{{ $systemHealth['queued_jobs'] }} queued jobs, {{ $systemHealth['failed_jobs'] }} historical failed jobs, {{ $systemHealth['query_ms'] ?? '—' }} ms query">
+                    <span data-health-status>{{ $systemHealth['status'] }}</span> · <span data-health-query>{{ $systemHealth['query_ms'] ?? '—' }}</span> ms · <span data-health-queued>{{ $systemHealth['queued_jobs'] }}</span> queued
+                </div>
                 <div class="relative order-2 ml-auto md:order-3">
                     <button type="button" @click="profileOpen = !profileOpen" class="flex items-center gap-3 rounded-xl px-2 py-1.5 text-left hover:bg-slate-100">
                         <span class="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 font-bold text-white">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
